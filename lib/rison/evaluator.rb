@@ -4,11 +4,9 @@ require 'rison/grammar'
 
 module Rison
   class Evaluator < Dhaka::Evaluator
-
     self.grammar = Grammar
-  
-    define_evaluation_rules do
 
+    define_evaluation_rules do
       for_empty_object do
         {}
       end
@@ -49,7 +47,7 @@ module Rison
 
       # for_value_id do
 
-      # for_value_string
+      # for_value_string
 
       # for_value_number do
 
@@ -75,7 +73,7 @@ module Rison
 
       for_id_idstart_idchars do
         (evaluate(child_nodes[0]) + evaluate(child_nodes[1])).to_sym
-      end    
+      end
 
       # for_idchars_idchar
 
@@ -90,7 +88,7 @@ module Rison
       for_idchar_char do
         child_nodes[0].token.value
       end
-      
+
       # for_idchar_idstart
 
       for_idstart_char do
@@ -126,7 +124,7 @@ module Rison
       end
 
       # for_strchar_idchar
-      
+
       for_strchar_num do
         evaluate(child_nodes[0]).to_s
       end
@@ -140,7 +138,7 @@ module Rison
       for_number_int_exp do
         evaluate(child_nodes[0]) * evaluate(child_nodes[1])
       end
-      
+
       for_number_int_frac_exp do
         (evaluate(child_nodes[0]) + evaluate(child_nodes[1])) * evaluate(child_nodes[2])
       end
@@ -148,25 +146,23 @@ module Rison
       for_integer_literal do
         token = child_nodes[0].token.value
         token =~ /^(-?)(\d+?)$/
-        
+
         $1.empty?? $2.to_i : - $2.to_i
       end
 
       for_frac_literal do
         token = child_nodes[0].token.value
         token =~ /^\.(\d+?)$/
-        
+
         Rational($1.to_i, 10 ** $1.length)
       end
 
       for_exponent_literal do
         token = child_nodes[0].token.value
         token =~ /^e(-?)(\d+?)$/
-        
+
         10 ** ($1.empty?? $2.to_i : - $2.to_i)
       end
-
     end
-
   end
 end

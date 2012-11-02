@@ -8,11 +8,11 @@ module Rison
       when TrueClass then '!t'
 
       when FalseClass then '!f'
-        
+
       when Symbol then dump(object.to_s)
 
       when Rational then object.to_f.to_s
-      
+
       when Numeric then object.to_s
 
       when String
@@ -40,7 +40,7 @@ module Rison
   end
 
   def self.escape(string)
-    string.gsub('!', '!!').gsub("'", "!'") 
+    string.gsub('!', '!!').gsub("'", "!'")
   end
 
   def self.id?(string)

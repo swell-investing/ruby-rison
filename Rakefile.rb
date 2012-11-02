@@ -45,7 +45,7 @@ namespace :stdin do
   end
   task :parse do
     parsed = Rison.parse(Rison.lex($stdin.read.chomp))
-    
+
     if parsed.has_error?
       p parsed
     else
@@ -64,10 +64,10 @@ end
 desc 'Regenerate the compiled parser'
 task :regen do
   $:.unshift 'lib'
-  
+
   require 'rison/grammar'
   require 'dhaka'
-  
+
   parser = Dhaka::Parser.new(Rison::Grammar)
 
   source = [
