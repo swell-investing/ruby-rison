@@ -1,7 +1,5 @@
 require 'rake'
 require 'rake/testtask'
-require 'rake/gempackagetask'
-
 
 GEMSPEC = Gem::Specification.new do |s|
   s.name = 'rison'
@@ -18,22 +16,11 @@ GEMSPEC = Gem::Specification.new do |s|
   s.add_dependency 'dhaka'
 end
 
-
-Rake::GemPackageTask.new(GEMSPEC) { }
-
-
-Rake::PackageTask.new(GEMSPEC.name, GEMSPEC.version) do |p|
-  p.need_tar_gz = true
-  p.package_files.include GEMSPEC.files
-end
-
-
 desc 'Run all the tests'
 Rake::TestTask.new do |t|
   t.verbose = true
   t.ruby_opts = ['-rubygems']
 end
-
 
 namespace :stdin do
   $:.unshift 'lib'
@@ -53,13 +40,6 @@ namespace :stdin do
     end
   end
 end
-
-
-task :reinstall do
-  sh 'sudo gem uninstall rison dhaka'
-  sh 'sudo gem install pkg/rison-%s.gem' % GEMSPEC.version
-end
-
 
 desc 'Regenerate the compiled parser'
 task :regen do
