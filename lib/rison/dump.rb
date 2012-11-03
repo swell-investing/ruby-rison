@@ -1,49 +1,40 @@
 require 'rational'
 
 module Rison
+  NIL = '!n'.freeze
+
+  TRUE = '!t'.freeze
+
+  FALSE = '!f'.freeze
+
+  class DumpError < StandardError; end
+
   def self.dump(object)
     case object
-      when NilClass then '!n'
+      when NilClass then NIL
 
-      when TrueClass then '!t'
+      when TrueClass then TRUE
 
-      when FalseClass then '!f'
+      when FalseClass then FALSE
 
-      when Symbol then dump(object.to_s)
+      when Symbol then object.to_s
 
       when Rational then object.to_f.to_s
 
       when Numeric then object.to_s
 
-      when String
-        if object.empty?
-          "''"
-        elsif id?(object)
-          object
-        else
-          quote(object)
-        end
+      when String then "'#{escape(object)}'"
 
-      when Hash
-        '(%s)' % (object.sort_by { |k, v| k.to_s }.map { |(k, v)| '%s:%s' % [ dump(k), dump(v) ] } * ',')
+      when Hash then '(%s)' % object.map { |(k, v)| "#{dump(k)}:#{dump(v)}" }.join(?,)
 
-      when Array
-        '!(%s)' % (object.map { |x| dump(x) } * ',')
+      when Array then '!(%s)' % object.map { |member| dump(member) }.join(?,)
 
       else
-        raise ArgumentError, 'cannot serialize: %p' % object
+        raise DumpError, "Cannot encode #{object.class} objects"
     end
-  end
-
-  def self.quote(string)
-    "'%s'" % escape(string)
   end
 
   def self.escape(string)
     string.gsub('!', '!!').gsub("'", "!'")
-  end
-
-  def self.id?(string)
-    string !~ /^(-|\d)/ && string !~  /['!:(),*@$ ]/
   end
 end
