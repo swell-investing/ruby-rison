@@ -1,6 +1,7 @@
 Gem::Specification.new do |s|
   s.name = 'rison'
   s.version = '2.0.0'
+  s.license = 'MIT'
   s.platform = Gem::Platform::RUBY
   s.authors = ['Tim Fletcher']
   s.email = ['mail@tfletcher.com']
