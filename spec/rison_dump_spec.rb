@@ -65,6 +65,10 @@ describe 'Rison dump method' do
     Rison.dump({'id' => nil, 'type' => '/common/document'}).must_equal(%(('id':!n,'type':'/common/document')))
   end
 
+  it 'encodes numeric hash keys as strings' do
+    Rison.dump({1 => 2}).must_equal("('1':2)")
+  end
+
   it 'encodes arrays' do
     Rison.dump([]).must_equal('!()')
     Rison.dump([true]).must_equal('!(!t)')

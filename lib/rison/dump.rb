@@ -25,13 +25,17 @@ module Rison
 
       when String then "'#{escape(object)}'"
 
-      when Hash then '(%s)' % object.map { |(k, v)| "#{dump(k)}:#{dump(v)}" }.join(?,)
+      when Hash then '(%s)' % object.map { |(k, v)| dump_pair(k, v) }.join(?,)
 
       when Array then '!(%s)' % object.map { |member| dump(member) }.join(?,)
 
       else
         raise DumpError, "Cannot encode #{object.class} objects"
     end
+  end
+
+  def self.dump_pair(key, value)
+    key.is_a?(Symbol) ? "#{key}:#{dump(value)}" : "#{dump(key.to_s)}:#{dump(value)}"
   end
 
   def self.escape(string)
