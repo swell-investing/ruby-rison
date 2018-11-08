@@ -26,9 +26,9 @@ module Rison
 
     rule(:idchars) { idchar.repeat(1) }
 
-    rule(:idchar) { match(/[a-zA-Z_\.\/~\-0-9]/) } # TODO: any non-ASCII Unicode character
+    rule(:idchar) { match(Rison::ID_CHAR_PATTERN) }
 
-    rule(:idstart) { match(/[a-zA-Z_\.\/~]/) }
+    rule(:idstart) { match(Rison::ID_START_PATTERN) }
 
     rule(:int) { (str('-').maybe >> (non_zero_digit >> digits | digit)).as(:int) }
 

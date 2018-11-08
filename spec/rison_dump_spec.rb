@@ -36,10 +36,18 @@ describe 'Rison dump method' do
     Rison.dump(Rational(9999, 100)).must_equal('99.99')
   end
 
-  it 'encodes symbols as ids' do
+  it 'encodes symbols as ids when possible' do
     Rison.dump(:a).must_equal('a')
     Rison.dump(:'a-z').must_equal('a-z')
     Rison.dump(:'domain.com').must_equal('domain.com')
+  end
+
+  it 'encodes symbols as strings when they cannot be ids' do
+    Rison.dump(:'').must_equal(%(''))
+    Rison.dump(:'0a').must_equal(%('0a'))
+    Rison.dump(:'a|').must_equal(%('a|'))
+    Rison.dump(:'-h').must_equal(%('-h'))
+    Rison.dump(:'US $10').must_equal(%('US $10'))
   end
 
   it 'encodes strings' do

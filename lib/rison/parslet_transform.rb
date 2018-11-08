@@ -17,13 +17,13 @@ module Rison
 
     rule(int: simple(:int), frac: simple(:frac), exp: simple(:exp)) { Rison::Number(int, frac, exp) }
 
-    rule(identifier: simple(:value)) { value.to_s.to_sym }
+    rule(identifier: simple(:value)) { value.to_s }
 
     rule(chr: simple(:chr)) { chr.to_s }
 
     rule(string: subtree(:characters)) { characters.join }
 
-    rule(key: subtree(:k), value: subtree(:v)) { {k => v} }
+    rule(key: subtree(:k), value: subtree(:v)) { {k.to_sym => v} }
 
     rule(empty_object: '()') { Hash.new }
 

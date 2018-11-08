@@ -20,9 +20,10 @@ end
 
 def scalar_input_property
   freq(
-    [3, :integer],
+    [1, :integer],
     [2, :float],
-    [3, :string],
+    [2, :string],
+    [2, proc { string.to_sym }],
     [1, :boolean],
     [1, [:literal, nil]],
   )
@@ -36,9 +37,16 @@ def array_input_property(depth)
   )
 end
 
-def hash_input_property(depth)
+def hash_input_property(depth = 0)
   dict {
-    [ string, input_property(depth) ]
+    [
+      branch(
+        :string,
+        proc { string.to_sym }
+      ),
+      string
+      # input_property(depth)
+    ]
   }
 end
 
@@ -53,8 +61,9 @@ end
 def expected_decoded_form(data)
   case data
   when Deflating then data.array.map{|elem| expected_decoded_form(elem) }
-  when Hash then data.map{|key, val| [key, expected_decoded_form(val)] }.to_h
+  when Hash then data.map{|key, val| [key.to_sym, expected_decoded_form(val)] }.to_h
   when Float then Rational(data.to_s)
+  when Symbol then data.to_s
   else data
   end
 end

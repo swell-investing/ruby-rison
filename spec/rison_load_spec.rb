@@ -45,10 +45,10 @@ describe 'Rison load method' do
     Rison.load('1.5e2').must_equal(150)
   end
 
-  it 'parses ids as symbols' do
-    Rison.load('a').must_equal(:a)
-    Rison.load('a-z').must_equal(:'a-z')
-    Rison.load('domain.com').must_equal(:'domain.com')
+  it 'parses ids as strings' do
+    Rison.load('a').must_equal('a')
+    Rison.load('a-z').must_equal('a-z')
+    Rison.load('domain.com').must_equal('domain.com')
   end
 
   it 'parses strings' do
@@ -65,12 +65,13 @@ describe 'Rison load method' do
     Rison.load(%('can!'t')).must_equal("can't")
   end
 
-  it 'parses objects as hashes' do
+  it 'parses objects as hashes with symbol keys' do
     Rison.load('()').must_equal({})
     Rison.load('(a:0)').must_equal(:a => 0)
+    Rison.load('(\'a\':0)').must_equal(:a => 0)
     Rison.load('(a:0,b:1)').must_equal(:a => 0, :b => 1)
-    Rison.load('(a:0,b:foo,c:\'23skidoo\')').must_equal(:a => 0, :b => :foo, :c => '23skidoo')
-    Rison.load('(id:!n,type:/common/document)').must_equal(:id => nil, :type => :'/common/document')
+    Rison.load('(a:0,b:foo,c:\'23skidoo\')').must_equal(:a => 0, :b => 'foo', :c => '23skidoo')
+    Rison.load('(id:!n,type:/common/document)').must_equal(:id => nil, :type => '/common/document')
   end
 
   it 'parses arrays' do
