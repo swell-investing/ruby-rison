@@ -53,7 +53,7 @@ end
 def encodable_form(data)
   case data
   when Deflating then data.array.map{|elem| encodable_form(elem) }
-  when Hash then data.map{|key, val| [key, encodable_form(val)] }.to_h
+  when Hash then Hash[data.map{|key, val| [key, encodable_form(val)] }]
   else data
   end
 end
@@ -61,7 +61,7 @@ end
 def expected_decoded_form(data)
   case data
   when Deflating then data.array.map{|elem| expected_decoded_form(elem) }
-  when Hash then data.map{|key, val| [key.to_sym, expected_decoded_form(val)] }.to_h
+  when Hash then Hash[data.map{|key, val| [key.to_sym, expected_decoded_form(val)] }]
   when Float then Rational(data.to_s)
   when Symbol then data.to_s
   else data
