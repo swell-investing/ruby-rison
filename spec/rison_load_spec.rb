@@ -14,7 +14,7 @@ describe 'Rison load method' do
   end
 
   it 'parses nil' do
-    Rison.load('!n').must_equal(nil)
+    assert_nil Rison.load('!n')
   end
 
   it 'parses zero' do
